@@ -1,11 +1,19 @@
+### Random event generator
+
+This app allows the user to create random events allocated between now and one week before and after and display the average of events per day/hour/minute.
+
+<img width="878" alt="image" src="https://user-images.githubusercontent.com/17145410/212391496-318e1339-e85b-4b0f-8ccb-b2b181bde728.png">
+
+
 This project starts from a boilerplate that has been cloned from https://github.com/miguelgrinberg/react-flask-app and simplified.
 
 ### Technologies 
-The react app was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-A Flask based API backend was added in the *api* directory.
+- Frontend: React, bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-InfluxDB is used as a database.
+- Backend: Flask
+
+- Database: InfluxDB v.1.8
 
 ### Demo: 
 https://www.loom.com/share/e2a97c085baa416cbde3cf8caa3bb63e
