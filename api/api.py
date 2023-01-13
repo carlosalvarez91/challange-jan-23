@@ -1,16 +1,11 @@
-import time
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from influxdb import InfluxDBClient
-from datetime import datetime, timedelta
-import random
+from influxclient import client
+from utils import get_random_time
 
 # Flask app
 app = Flask(__name__, static_folder='../build', static_url_path='/')
 CORS(app, origins=['http://localhost:3000']) 
-
-# Influx
-client = InfluxDBClient(host='0.0.0.0', port=8086, username='admin', password='password', database='test')
 
 # Router
 @app.errorhandler(404)
@@ -24,18 +19,10 @@ def index():
 @app.route('/api/insert_data', methods=["POST"])
 def insert_data():
     data = request.get_json()
-    # get the current time
-    now = datetime.now()
-    # set the time range, one week before and after
-    start_time = now - timedelta(weeks=1)
-    end_time = now + timedelta(weeks=1)
-    # generate a random time within the range
-    random_time = start_time + timedelta(seconds=random.randint(0, int((end_time - start_time).total_seconds())))
-    random_time_iso = random_time.isoformat()
     json_body = [
         {
             "measurement": "events",
-            "time": random_time_iso,
+            "time": get_random_time(),
             "fields": {
                 "value": data['value']
             }
@@ -47,7 +34,6 @@ def insert_data():
 
 @app.route('/api/query_data/<window>')
 def query_data_avg(window):
-    print('.... window ',window)
     time = '1m' # default
     if window == 'day':
         time = '1d'
@@ -60,6 +46,5 @@ def query_data_avg(window):
         return jsonify(list(result.get_points()))
 
     query = f'''SELECT MEAN(value) as value FROM events GROUP BY time({time})'''
-    print(query)
     result = client.query(query)
     return jsonify(list(result.get_points()))
