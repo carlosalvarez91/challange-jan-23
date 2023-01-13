@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Plot from 'react-plotly.js';
 import './App.css';
 
 function App() {
@@ -15,7 +16,9 @@ function App() {
       })
     })
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data =>
+      setData(data)
+    )
     .catch(error => console.log(error));
   }
 
@@ -31,14 +34,22 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-   
-          <div>
-            <button onClick={handleWriteData}>
-              Write event
-            </button>
-          </div>
-        
-
+          <button className="btn" onClick={handleWriteData}>
+            Write Event
+          </button>
+  
+          <Plot
+            data={[
+              {
+                x: data.map(e=>e.time),
+                y: data.map(e=>e.value),
+                type: 'scatter',
+                mode: 'lines+markers',
+                marker: {color: 'red'},
+              }
+            ]}
+            layout={ {width: 500, height: 240, title: 'Events'} }
+          />
 
 
       </header>
