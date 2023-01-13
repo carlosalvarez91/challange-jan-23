@@ -4,6 +4,7 @@ import './App.css';
 
 function App() {
   const [data, setData] = useState([]);
+  const [selectedTime, setSelectedTime] = useState('minute')
 
   const handleWriteData = () => {
     fetch('http://127.0.0.1:5000/api/insert_data', {
@@ -16,19 +17,25 @@ function App() {
       })
     })
     .then(response => response.json())
-    .then(data =>
-      setData(data)
-    )
+    .then(data =>{
+      handleQueryData(selectedTime)
+    })
     .catch(error => console.log(error));
   }
 
-  useEffect(() => {
-    fetch('http://127.0.0.1:5000/api/query_data')
+  const handleQueryData = (value) => {
+    fetch(`http://127.0.0.1:5000/api/query_data/${value}`)
     .then(res => res.json())
-    .then(data => {
-      setData(data);
+    .then(d => {
+      console.log(d)
+      setData(d)
     })
     .catch(e=>console.error(e))
+  }
+
+  useEffect(() => {
+    // on init query avg per minute
+    handleQueryData('minute')
   }, []);
 
   return (
@@ -37,6 +44,15 @@ function App() {
           <button className="btn" onClick={handleWriteData}>
             Write Event
           </button>
+          <select className='select' onChange={(e)=>{
+            setSelectedTime(e.target.value)
+            handleQueryData(e.target.value)
+          }} value={selectedTime}>
+            <option value="minute">AVG / Minute</option>
+            <option value="hour">AVG / Hour</option>
+            <option value="day">AVG / Day</option>
+            <option value="all">All Events</option>
+          </select>
   
           <Plot
             data={[
@@ -50,8 +66,6 @@ function App() {
             ]}
             layout={ {width: 500, height: 240, title: 'Events'} }
           />
-
-
       </header>
     </div>
   );
