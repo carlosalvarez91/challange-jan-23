@@ -1,5 +1,5 @@
 import time
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from influxdb import InfluxDBClient
 
@@ -19,7 +19,23 @@ def not_found(e):
 def index():
     return app.send_static_file('index.html')
 
+@app.route('/api/insert_data', methods=["POST"])
+def insert_data():
+    data = request.get_json()
+    json_body = [
+        {
+            "measurement": "events",
+            "fields": {
+                "value": data['value']
+            }
+        }
+    ]
 
-@app.route('/api/time')
-def get_current_time():
-    return {'time': time.time()}
+    client.write_points(json_body)
+    result = client.query('SELECT * FROM events')
+    return jsonify(list(result.get_points()))
+
+@app.route('/api/query_data')
+def query_data():
+    result = client.query('SELECT * FROM events')
+    return jsonify(list(result.get_points()))

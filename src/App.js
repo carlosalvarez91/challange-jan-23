@@ -1,15 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Link, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 function App() {
-  const [currentTime, setCurrentTime] = useState(0);
+  const [data, setData] = useState([]);
+
+  const handleWriteData = () => {
+    fetch('http://127.0.0.1:5000/api/insert_data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        value: Math.random(),
+      })
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.log(error));
+  }
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/api/time')
+    fetch('http://127.0.0.1:5000/api/query_data')
     .then(res => res.json())
     .then(data => {
-      setCurrentTime(data.time);
+      setData(data);
     })
     .catch(e=>console.error(e))
   }, []);
@@ -17,17 +31,16 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <BrowserRouter>
+   
           <div>
-            <Link className="App-link" to="/">Home</Link>
-            &nbsp;|&nbsp;
-            <Link className="App-link" to="/page2">Page2</Link>
+            <button onClick={handleWriteData}>
+              Write event
+            </button>
           </div>
-          <Routes>
-            <Route exact path="/" element={<React.Fragment><p>The current time is {currentTime}.</p></React.Fragment>}/>
-            <Route exact path="/page2" element={<React.Fragment><p>The current time is {currentTime}.</p></React.Fragment>}/>
-          </Routes>
-        </BrowserRouter>
+        
+
+
+
       </header>
     </div>
   );

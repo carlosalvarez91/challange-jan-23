@@ -36,18 +36,24 @@ $ yarn start
 
 
 
-InfluxDB
+InfluxDB, we will use any version previous to 2, in my machine I'm using 1.8
 
 installation (mac):
-brew install influxdb
-brew install influxdb-cli
+brew install influxdb@1
 
-setup:
-$ influx setup
+Setup influx:
 
-username=admin
-password=password
+run influx:
+$ influxd 
 
-now let's create a db:
-$ influx bucket create --name test, or alternative you can use the ui at http://localhost:8086
+run cli:
+$ influx
+
+create db
+
+CREATE DATABASE test
+
+create admin user
+
+CREATE USER admin WITH PASSWORD '<password>' WITH ALL PRIVILEGES
 
