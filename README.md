@@ -1,59 +1,83 @@
-This boilerplate has been cloned from https://github.com/miguelgrinberg/react-flask-app and simplified.
+This project starts from a boilerplate that has been cloned from https://github.com/miguelgrinberg/react-flask-app and simplified.
 
+### Technologies 
 The react app was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 A Flask based API backend was added in the *api* directory.
 
+InfluxDB is used as a database.
 
-Install Backend:
+### Demo: 
+https://www.loom.com/share/e2a97c085baa416cbde3cf8caa3bb63e
+
+
+### Steps to get it up and running:
+
+
+##### Install Backend:
 
 1. create venv inside /api directory:
-
+```
 $ python3 -m venv venv
+```
 
 2. activate virtualenv: 
-
+```
 $ source api/venv/bin/activate
+```
 
 3. install packages
-
+```
 $ pip install -r requirements.txt
+```
 
-Install Frontend:
+##### Install Frontend:
 
-1. npm install
+```
+$ npm install
+```
 
 
-Run Project:
+##### Run Project:
 
 1. Run backend
-
+```
 $ yarn start-api
+```
 
 2. Run Frontend
 
+```
 $ yarn start
+```
 
+##### InfluxDB
+We will use any version previous to 2, in my machine I'm using 1.8
 
-
-InfluxDB, we will use any version previous to 2, in my machine I'm using 1.8
-
-installation (mac):
+Installation (mac):
+```
 brew install influxdb@1
-
-Setup influx:
+```
 
 run influx:
+```
 $ influxd 
+```
 
 run cli:
+```
 $ influx
+```
 
 create db
 
+```
 CREATE DATABASE test
+```
 
 create admin user
 
-CREATE USER admin WITH PASSWORD '<password>' WITH ALL PRIVILEGES
+```
+CREATE USER admin WITH PASSWORD 'password' WITH ALL PRIVILEGES
+```
 
